@@ -7,4 +7,3 @@
 - Can generate absurdly large number of outputs.
 - Lazy generation of items ( iterator API.)
 - Simple C interface
-- Test edit
