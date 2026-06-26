@@ -1,4 +1,4 @@
-# Cartesan Product Iterator in C
+# Cartesian Product Iterator in C
 
 - A small program to produce cartesan product of items.
 
