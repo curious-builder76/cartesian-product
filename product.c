@@ -1,5 +1,5 @@
 /*
- * A program to find cartesan product of items.
+ * A program to find cartesian product of items.
  */
 
 #include<stdio.h>
@@ -17,6 +17,8 @@ typedef struct{
 
 
 product_t* product_new(char* buff,uint32_t ret_len){
+	// Set every resource that will be allocated from heap to NULL
+	// for error handling.
 	product_t* p=NULL;
 	uint32_t* counters=NULL;
 	char* ret_buff=NULL;
@@ -40,6 +42,7 @@ product_t* product_new(char* buff,uint32_t ret_len){
 	counters=malloc(sizeof(uint32_t)*ret_len);
 	if(counters==NULL)
 		goto fail;
+	// Initialize the odometer.
 	memset(counters,0,sizeof(uint32_t)*ret_len);
 	p->buff_len=buff_len;
 	p->counters=counters;
@@ -58,17 +61,26 @@ fail:
 
 
 char* product_next(product_t* p){
+	// Unload some of the things for less overhead
 	uint32_t* counters=p->counters;
 	uint32_t len=p->buff_len;
+
+	// Check if the odometer is overflowing...
+	
 	if(counters[p->ret_len-1]>=p->buff_len){
 		return NULL;
 	}
+
+	// Copy the current mapping to ret_buff;
 	char* ret_buff=p->ret_buff;
 	for(uint32_t i=0;i<p->ret_len;i++){
 		uint32_t k=counters[i];
 		ret_buff[i]=p->mem_buff[k];
 	}
+	// Increment the odometer.
 	counters[0]++;
+
+	// Simulate the carry logic.
 	uint32_t carry=0;
 	for(uint32_t i=0;i<p->ret_len-1;i++){
 		if(counters[i]<len) 
@@ -84,6 +96,7 @@ char* product_next(product_t* p){
 
 
 void product_destroy(product_t* p){
+	// Release resources.
 	free(p->mem_buff);
 	free(p->counters);
 	free(p->ret_buff);
